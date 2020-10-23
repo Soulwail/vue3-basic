@@ -60,8 +60,8 @@ export default {
             numbers: [1, 2, 3],
             person: {},
         });
-        data.numbers[0] = 5;
-        data.person.name = 'soulwail';
+        // data.numbers[0] = 5;
+        // data.person.name = 'soulwail';
 
         const greetings = ref('');
         const updateGreeting = () => {
