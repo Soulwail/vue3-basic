@@ -1,8 +1,13 @@
+import useMousePosition from './hooks/useMousePosition'; import useURLLoader
+from './hooks/useURLLoader';
 <template>
     <div id="app">
         <img alt="Vue logo" src="./assets/logo.png" />
         <h1>{{ count }}</h1>
         <h1>{{ double }}</h1>
+        <h1 v-if="loading">Loading...</h1>
+        <img v-if="loaded" :src="result.message">
+        <h1>X：{{ x }}，Y：{{ y }}</h1>
         <!-- <ul>
             <li v-for="number in numbers" :key="number">
                 <h1>{{ number }}</h1>
@@ -23,10 +28,13 @@ import {
     reactive,
     toRefs,
     onMounted,
+    onUnmounted,
     onUpdated,
     onRenderTriggered,
     watch,
 } from 'vue';
+import useMousePosition from './hooks/useMousePosition';
+import useURLLoader from './hooks/useURLLoader';
 interface DataProps {
     count: number;
     double: number;
@@ -73,6 +81,12 @@ export default {
             document.title = 'upload' + greetings.value + data.count;
         });
 
+        const { x, y } = useMousePosition();
+
+        const { result, loading, loaded } = useURLLoader(
+            'https://dog.ceo/api/breeds/image/random'
+        );
+
         const refData = toRefs(data);
         return {
             // count,
@@ -81,6 +95,11 @@ export default {
             ...refData,
             greetings,
             updateGreeting,
+            x,
+            y,
+            result,
+            loading,
+            loaded,
         };
     },
 };
