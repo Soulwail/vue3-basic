@@ -6,7 +6,8 @@ from './hooks/useURLLoader';
         <h1>{{ count }}</h1>
         <h1>{{ double }}</h1>
         <h1 v-if="loading">Loading...</h1>
-        <img v-if="loaded" :src="result.message">
+        <!-- <img v-if="loaded" :src="result.message" /> -->
+        <img v-if="loaded" :src="result[0].url" />
         <h1>X：{{ x }}，Y：{{ y }}</h1>
         <!-- <ul>
             <li v-for="number in numbers" :key="number">
@@ -41,6 +42,16 @@ interface DataProps {
     increase: () => void;
     numbers: number[];
     person: { name?: string };
+}
+interface DogResult {
+    message: string;
+    status: string;
+}
+interface CatResult {
+    id: string;
+    url: string;
+    width: number;
+    height: number;
 }
 export default {
     name: 'App',
@@ -83,9 +94,19 @@ export default {
 
         const { x, y } = useMousePosition();
 
-        const { result, loading, loaded } = useURLLoader(
-            'https://dog.ceo/api/breeds/image/random'
+        // const { result, loading, loaded } = useURLLoader<DogResult>(
+        //     'https://dog.ceo/api/breeds/image/random'
+        // );
+
+        const { result, loading, loaded } = useURLLoader<CatResult[]>(
+            'https://api.thecatapi.com/v1/images/search?limit=1'
         );
+
+        watch(result, () => {
+            if (result.value) {
+                console.log(result.value[0].url);
+            }
+        });
 
         const refData = toRefs(data);
         return {
