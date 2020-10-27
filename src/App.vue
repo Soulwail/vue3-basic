@@ -16,6 +16,10 @@ from './hooks/useURLLoader';
         </ul>
         <h1>{{ person.name }}</h1> -->
         <h1>{{ greetings }}</h1>
+        <button @click="openModal">Open Modal</button>
+        <modal :isOpen="modalIsOpen" @close-modal="onModalClose">
+            My Modal!!!
+        </modal>
         <button @click="increase">👍+1</button>
         <br />
         <button @click="updateGreeting">Update Title</button>
@@ -36,6 +40,7 @@ import {
 } from 'vue';
 import useMousePosition from './hooks/useMousePosition';
 import useURLLoader from './hooks/useURLLoader';
+import Modal from './components/Modal.vue';
 interface DataProps {
     count: number;
     double: number;
@@ -55,6 +60,9 @@ interface CatResult {
 }
 export default {
     name: 'App',
+    components: {
+        Modal,
+    },
     setup() {
         // const count = ref(0);
         // const double = computed(() => count.value * 2);
@@ -108,6 +116,14 @@ export default {
             }
         });
 
+        const modalIsOpen = ref(false);
+        const openModal = () => {
+            modalIsOpen.value = true;
+        };
+        const onModalClose = () => {
+            modalIsOpen.value = false;
+        };
+
         const refData = toRefs(data);
         return {
             // count,
@@ -121,6 +137,9 @@ export default {
             result,
             loading,
             loaded,
+            modalIsOpen,
+            openModal,
+            onModalClose,
         };
     },
 };
