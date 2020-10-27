@@ -16,11 +16,23 @@ from './hooks/useURLLoader';
         </ul>
         <h1>{{ person.name }}</h1> -->
         <h1>{{ greetings }}</h1>
+        <p>{{ error }}</p>
+        <Suspense>
+            <template #default>
+                <div>
+                    <async-show></async-show>
+                    <dog-show></dog-show>
+                </div>
+            </template>
+            <template #fallback>
+                <h1>Loading!...</h1>
+            </template>
+        </Suspense>
         <button @click="openModal">Open Modal</button>
+        <button @click="increase">👍+1</button>
         <modal :isOpen="modalIsOpen" @close-modal="onModalClose">
             My Modal!!!
         </modal>
-        <button @click="increase">👍+1</button>
         <br />
         <button @click="updateGreeting">Update Title</button>
     </div>
@@ -37,10 +49,13 @@ import {
     onUpdated,
     onRenderTriggered,
     watch,
+    onErrorCaptured,
 } from 'vue';
 import useMousePosition from './hooks/useMousePosition';
 import useURLLoader from './hooks/useURLLoader';
 import Modal from './components/Modal.vue';
+import AsyncShow from './components/AsyncShow.vue';
+import DogShow from './components/DogShow.vue';
 interface DataProps {
     count: number;
     double: number;
@@ -62,8 +77,15 @@ export default {
     name: 'App',
     components: {
         Modal,
+        AsyncShow,
+        DogShow,
     },
     setup() {
+        const error = ref(null);
+        onErrorCaptured((e: any) => {
+            error.value = e;
+            return true;
+        });
         // const count = ref(0);
         // const double = computed(() => count.value * 2);
         // const increase = () => {
@@ -140,6 +162,7 @@ export default {
             modalIsOpen,
             openModal,
             onModalClose,
+            error,
         };
     },
 };
