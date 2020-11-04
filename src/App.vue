@@ -11,7 +11,7 @@ const testData: ColumnProps[] = [
     { id: 1, title: 'test1的专栏', description: '这是test1的专栏' },
     { id: 2, title: 'test2的专栏', description: '这是test2的专栏' },
 ];
-export default {
+export default defineComponent({
     name: 'App',
     components: {
         ColumnList,
@@ -21,7 +21,7 @@ export default {
             list: testData,
         };
     },
-};
+});
 </script>
 
 <style></style>
